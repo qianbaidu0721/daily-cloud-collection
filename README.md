@@ -1,199 +1,125 @@
-# 每日云彩收集 API
+# 云屿集 · Daily Cloud Collection
 
-微信小程序「每日云彩收集」后端，基于 **Laravel 11 + MySQL + JWT**。
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Laravel](https://img.shields.io/badge/Laravel-11-red.svg)](https://laravel.com)
+[![Vue](https://img.shields.io/badge/Vue-3-green.svg)](https://vuejs.org)
 
-## 开发服务器部署（无需本地 PHP 环境）
+「云屿集」是一套 **每日云朵收集** 全栈方案：微信小程序 + Laravel API + Vue 管理后台。
 
-将本项目上传到开发服务器后，依次执行：
+每天拍一朵云，记录心情与位置，生成分享卡片，在云朵广场与他人共享天空。
 
-```bash
-# 1. 安装依赖
-composer install --no-dev --optimize-autoloader
+## 功能概览
 
-# 2. 复制环境配置
-cp .env.example .env
+| 模块 | 能力 |
+|------|------|
+| 小程序 | 每日收集、心情/云型/位置、日历、云朵列表、分享卡片、云朵广场 |
+| API | JWT 登录、图片上传、逆地理编码、分享卡片生成、公开广场 |
+| 管理后台 | 用户/云朵/云类型管理、数据统计 |
 
-# 3. 编辑 .env，填写数据库与微信配置
-# DB_HOST / DB_DATABASE / DB_USERNAME / DB_PASSWORD
-# WECHAT_MINI_APP_ID / WECHAT_MINI_APP_SECRET
-
-# 4. 生成应用密钥与 JWT 密钥
-php artisan key:generate
-php artisan jwt:secret
-
-# 5. 创建数据库（MySQL）
-# CREATE DATABASE daily_cloud CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-# 6. 执行迁移与种子数据
-php artisan migrate --seed
-
-# 7. 创建图片存储软链接（云朵图片通过 /storage/clouds/... 访问）
-php artisan storage:link
-chmod -R 775 storage bootstrap/cache
-mkdir -p storage/app/public/clouds
-
-# 8. 启动开发服务（或配置 Nginx 指向 public/）
-php artisan serve --host=0.0.0.0 --port=8000
-```
-
-Nginx 站点根目录**必须**指向 `public/`（不是项目根目录），API 前缀为 `/api/v1/*`。
-
-### 接口 404 排查
-
-1. **宝塔站点目录**：网站 → 设置 → 网站目录 → 运行目录选 `/public`
-2. **验证接口**：浏览器访问 `https://你的域名/api/v1/health`，应返回 `{"status":"ok"}`
-3. **清除路由缓存**（服务器上执行）：
-   ```bash
-   php artisan route:clear
-   php artisan config:clear
-   ```
-4. **Nginx 配置参考**：见 `deploy/nginx.conf.example`
-
----
-
-## 云朵 API（需 JWT 认证）
-
-请求头：`Authorization: Bearer {token}`
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/api/v1/auth/login` | 微信登录 |
-| POST | `/api/v1/clouds/upload` | 上传云朵（multipart/form-data） |
-| GET | `/api/v1/clouds/today` | 查询今日是否已上传 |
-| GET | `/api/v1/clouds` | 云朵列表（分页） |
-| GET | `/api/v1/clouds/{id}` | 云朵详情 |
-| GET | `/api/v1/health` | 健康检查 |
-| GET | `/api/clouds` | 云朵列表（15 条/页，按日期倒序） |
-| GET | `/api/clouds/{id}` | 云朵详情 |
-
-**上传字段：** `image`（文件）、`mood`（1-5）、`collect_date`（Y-m-d）、`mood_label`、`location_city`、`location_lat`、`location_lng`、`note`、`cloud_type`
-
-**图片存储：** `storage/app/public/clouds/年/月/日/`，需执行 `php artisan storage:link` 后通过 `APP_URL/storage/clouds/...` 访问。
-
----
-
-## 项目目录结构
+## 项目结构
 
 ```
 daily-cloud-collection/
-├── app/                          # 应用核心代码
-│   ├── Http/
-│   │   └── Controllers/          # 控制器（待添加：AuthController、CloudController）
-│   ├── Models/
-│   │   ├── User.php              # 用户模型（JWTSubject，hasMany Clouds）
-│   │   ├── Cloud.php             # 云朵记录（belongsTo User、CloudType）
-│   │   └── CloudType.php         # 云类型字典（hasMany Clouds）
-│   └── Providers/
-│       └── AppServiceProvider.php
-├── bootstrap/
-│   ├── app.php                   # Laravel 11 应用启动与路由注册
-│   └── providers.php
-├── config/
-│   ├── app.php                   # 应用基础配置
-│   ├── auth.php                  # 认证守卫（api 使用 jwt 驱动）
-│   ├── database.php              # MySQL 连接（读取 .env）
-│   └── jwt.php                   # JWT 配置（tymon/jwt-auth）
-├── database/
-│   ├── migrations/
-│   │   ├── 0001_01_01_000000_create_users_table.php   # users + sessions
-│   │   ├── 2024_01_01_000001_create_cloud_types_table.php
-│   │   └── 2024_01_01_000002_create_clouds_table.php
-│   └── seeders/
-│       ├── DatabaseSeeder.php
-│       └── CloudTypeSeeder.php   # 预置 8 种云类型
-├── public/
-│   └── index.php                 # Web 入口
-├── routes/
-│   ├── api.php                   # API 路由（/api/v1/*）
-│   ├── web.php
-│   └── console.php
-├── storage/
-│   ├── app/public/               # 云朵照片存储目录
-│   └── logs/
-├── .env.example                  # 环境变量模板
-├── artisan                       # Artisan CLI
-└── composer.json                 # PHP 8.2+ / Laravel 11 / jwt-auth
+├── app/                 # Laravel 后端
+├── miniprogram/         # 微信小程序
+├── admin-web/           # Vue 3 + Element Plus 管理端
+├── public/admin/        # 管理端构建产物（npm run build 输出，默认 gitignore）
+├── database/            # 迁移与种子
+├── deploy/              # Nginx 配置示例
+└── resources/fonts/     # 分享卡片中文字体（需自行放置）
 ```
 
----
+## 快速开始
 
-## 数据库表设计
+### 1. 后端 API
 
-### users（用户表）
+```bash
+composer install
+cp .env.example .env
+# 编辑 .env：数据库、WECHAT_APPID/SECRET、AMAP_KEY（逆地理编码，可选）
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | bigint | 主键 |
-| openid | varchar(64) | 微信小程序 OpenID，唯一 |
-| unionid | varchar(64) | 微信 UnionID，可空 |
-| nickname | varchar(64) | 昵称 |
-| avatar | varchar | 头像 URL |
-| created_at / updated_at | timestamp | 时间戳 |
-
-### cloud_types（云类型字典表）
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | bigint | 主键 |
-| name | varchar(32) | 类型名称（积云、层云等） |
-| code | varchar(32) | 唯一编码 |
-| description | varchar | 描述 |
-| icon | varchar | 图标，可空 |
-| sort | smallint | 排序 |
-| is_active | boolean | 是否启用 |
-
-### clouds（云朵记录表）
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | bigint | 主键 |
-| user_id | bigint | 外键 → users |
-| cloud_type_id | bigint | 外键 → cloud_types，可空 |
-| image_path | varchar | 照片存储路径 |
-| mood | varchar(32) | 心情标签 |
-| latitude / longitude | decimal(10,7) | 经纬度 |
-| location_name | varchar | 位置描述 |
-| record_date | date | 记录日期（每用户每天唯一） |
-| note | text | 备注 |
-
-**约束：** `(user_id, record_date)` 唯一索引，保证每天只能上传一张。
-
----
-
-## Model 关联关系
-
-```
-User
- └── hasMany → Cloud
-
-CloudType
- └── hasMany → Cloud
-
-Cloud
- ├── belongsTo → User
- └── belongsTo → CloudType
+php artisan key:generate
+php artisan jwt:secret
+php artisan migrate --seed
+php artisan storage:link
+php artisan serve
 ```
 
----
+健康检查：`GET http://127.0.0.1:8000/api/v1/health`
 
-## JWT 认证说明
+### 2. 微信小程序
 
-- `User` 模型已实现 `Tymon\JWTAuth\Contracts\JWTSubject`
-- `config/auth.php` 中 `api` 守卫驱动为 `jwt`
-- 部署后执行 `php artisan jwt:secret` 写入 `JWT_SECRET`
-- 小程序登录流程（待实现）：`wx.login` → 后端换 openid → 签发 JWT → 后续请求带 `Authorization: Bearer {token}`
+1. 用[微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)打开 `miniprogram/`
+2. 修改 `project.config.json` 中的 `appid`
+3. 修改 `utils/config.js` 中的 `baseURL` 为你的 API 地址
+4. 公众平台配置服务器域名（request / uploadFile）
 
----
+详见 [miniprogram/README.md](miniprogram/README.md)
 
-## 环境变量要点
+### 3. 管理后台
 
-详见 `.env.example`，关键项：
+```bash
+cd admin-web
+npm install
+cp .env.example .env.development   # 可选，默认代理到本地 8000 端口
+npm run dev                          # http://localhost:5173
+npm run build                        # 输出到 ../public/admin/
+```
+
+默认管理员（`php artisan db:seed` 后）：见 `.env.example` 中 `ADMIN_EMAIL` / `ADMIN_PASSWORD`
+
+详见 [admin-web/README.md](admin-web/README.md)
+
+## 主要 API
+
+前缀：`/api/v1` · 认证：`Authorization: Bearer {token}`
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/auth/login` | 微信登录 |
+| GET | `/clouds/today` | 今日收集状态 |
+| POST | `/clouds/upload` | 上传云朵 |
+| GET | `/clouds` | 我的云朵列表 |
+| GET | `/clouds/public` | 云朵广场 |
+| POST | `/clouds/card` | 生成分享卡片 |
+| GET | `/cloud-types` | 云类型列表 |
+| GET | `/location/reverse` | 经纬度逆解析 |
+
+## 生产部署要点
+
+- Web 根目录指向 `public/`
+- `php artisan config:cache` / `route:cache`
+- `storage/`、`bootstrap/cache/` 可写
+- 分享卡片需安装 `intervention/image`，并在 `resources/fonts/` 放置中文字体
+- 管理后台：`cd admin-web && npm run build`，访问 `https://域名/admin/`
+
+Nginx 参考：[deploy/nginx.conf.example](deploy/nginx.conf.example)
+
+## 环境变量
+
+见 [.env.example](.env.example)，关键项：
 
 | 变量 | 说明 |
 |------|------|
-| DB_* | MySQL 连接信息 |
-| JWT_SECRET | JWT 签名密钥 |
-| JWT_TTL | Token 有效期（分钟，默认 7 天） |
-| WECHAT_MINI_APP_ID | 小程序 AppID |
-| WECHAT_MINI_APP_SECRET | 小程序 AppSecret |
-| CLOUD_IMAGE_DISK | 云朵图片存储磁盘（默认 public） |
+| `WECHAT_APPID` / `WECHAT_SECRET` | 小程序凭证 |
+| `JWT_SECRET` | `php artisan jwt:secret` 生成 |
+| `AMAP_KEY` | 高德 Web 服务 Key（逆地理编码） |
+| `ADMIN_*` | 管理后台初始账号 |
+
+## 开源说明
+
+- 协议：[MIT](LICENSE)
+- **请勿**将 `.env`、JWT 密钥、微信 Secret、服务器私钥提交到仓库
+- 小程序 `project.config.json` 中的 AppID 请替换为你自己的
+
+## 参与贡献
+
+欢迎 Issue / Pull Request。提交前请确保：
+
+1. 不包含真实密钥与生产域名
+2. 后端变更需可 `php artisan migrate` 通过
+3. 管理端变更需 `npm run build` 通过
+
+---
+
+如果这个项目对你有帮助，欢迎 Star ⭐

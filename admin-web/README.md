@@ -20,7 +20,7 @@ npm run dev
 
 开发地址：http://localhost:5173/admin/
 
-**默认连远程 API**：`.env.development` 中 `VITE_API_PROXY_TARGET=https://cloud.chocei.com`，本地请求 `/api/*` 会由 Vite 代理到线上，无需本地 PHP/MySQL。
+**默认连本地 API**：`.env.development` 中 `VITE_API_PROXY_TARGET=http://127.0.0.1:8000`，需先启动 Laravel。
 
 若要连本地 Laravel，修改 `.env.development`：
 
@@ -43,7 +43,7 @@ npm run build
 | 变量 | 说明 |
 |------|------|
 | `VITE_API_BASE` | 管理端 API 前缀，默认 `/api/admin/v1` |
-| `VITE_API_PROXY_TARGET` | 开发代理目标，默认 `https://cloud.chocei.com`（仅 `npm run dev` 生效） |
+| `VITE_API_PROXY_TARGET` | 开发代理目标，默认 `http://127.0.0.1:8000`（仅 `npm run dev` 生效） |
 
 ## Nginx（宝塔）
 

@@ -6,9 +6,9 @@
 
 1. 用[微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)打开本目录 `miniprogram/`
 2. 修改 `project.config.json` 中的 `appid` 为你的小程序 AppID
-3. 修改 `utils/config.js` 中的 `baseURL`（默认 `https://cloud.chocei.com/api/v1`）
+3. 修改 `utils/config.js` 中的 `baseURL`（参考 `config.example.js`）
 4. 在微信公众平台 → 开发管理 → 开发设置 → 服务器域名，添加：
-   - request 合法域名：`https://cloud.chocei.com`（你的 API 域名）
+   - request 合法域名：`https://你的API域名`
    - uploadFile 合法域名：同上
 
 ## 目录结构
