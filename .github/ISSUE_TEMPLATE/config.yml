@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 查看文档
+    url: https://github.com/qianbaidu0721/daily-cloud-collection#readme
+    about: 部署与配置说明见 README
+  - name: 讨论区
+    url: https://github.com/qianbaidu0721/daily-cloud-collection/discussions
+    about: 提问、分享想法（需先在仓库 Settings 开启 Discussions）

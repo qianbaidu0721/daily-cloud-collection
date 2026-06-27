@@ -1,5 +1,6 @@
 # 云屿集 · Daily Cloud Collection
 
+[![GitHub stars](https://img.shields.io/github/stars/qianbaidu0721/daily-cloud-collection?style=social)](https://github.com/qianbaidu0721/daily-cloud-collection/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Laravel](https://img.shields.io/badge/Laravel-11-red.svg)](https://laravel.com)
 [![Vue](https://img.shields.io/badge/Vue-3-green.svg)](https://vuejs.org)
@@ -7,6 +8,18 @@
 「云屿集」是一套 **每日云朵收集** 全栈方案：微信小程序 + Laravel API + Vue 管理后台。
 
 每天拍一朵云，记录心情与位置，生成分享卡片，在云朵广场与他人共享天空。
+
+## 预览
+
+> 截图请放入 [`docs/screenshots/`](docs/screenshots/README.md) 目录。添加文件后，将下方注释取消即可展示。
+
+| 首页 | 日历 | 分享卡片 |
+|:---:|:---:|:---:|
+| <!-- ![首页](docs/screenshots/home.png) --> *home.png* | <!-- ![日历](docs/screenshots/calendar.png) --> *calendar.png* | <!-- ![分享卡片](docs/screenshots/share-card.png) --> *share-card.png* |
+
+| 云朵广场 | 管理后台 |
+|:---:|:---:|
+| <!-- ![广场](docs/screenshots/plaza.png) --> *plaza.png* | <!-- ![管理后台](docs/screenshots/admin-dashboard.png) --> *admin-dashboard.png* |
 
 ## 功能概览
 
@@ -50,8 +63,8 @@ php artisan serve
 ### 2. 微信小程序
 
 1. 用[微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)打开 `miniprogram/`
-2. 修改 `project.config.json` 中的 `appid`
-3. 修改 `utils/config.js` 中的 `baseURL` 为你的 API 地址
+2. 复制 `project.config.example.json` 为 `project.config.json`，填入你的 **AppID**
+3. 复制 `utils/config.example.js` 为 `utils/config.js`，填入 API 地址
 4. 公众平台配置服务器域名（request / uploadFile）
 
 详见 [miniprogram/README.md](miniprogram/README.md)
@@ -106,20 +119,20 @@ Nginx 参考：[deploy/nginx.conf.example](deploy/nginx.conf.example)
 | `AMAP_KEY` | 高德 Web 服务 Key（逆地理编码） |
 | `ADMIN_*` | 管理后台初始账号 |
 
-## 开源说明
-
-- 协议：[MIT](LICENSE)
-- **请勿**将 `.env`、JWT 密钥、微信 Secret、服务器私钥提交到仓库
-- 小程序 `project.config.json` 中的 AppID 请替换为你自己的
-
 ## 参与贡献
 
-欢迎 Issue / Pull Request。提交前请确保：
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-1. 不包含真实密钥与生产域名
-2. 后端变更需可 `php artisan migrate` 通过
-3. 管理端变更需 `npm run build` 通过
+- 报告 Bug：[Issue 模板](https://github.com/qianbaidu0721/daily-cloud-collection/issues/new/choose)
+- 协议：[MIT](LICENSE)
+- **请勿**将 `.env`、JWT 密钥、微信 Secret 提交到仓库
+
+## 发布版本
+
+| 版本 | 说明 |
+|------|------|
+| [v1.0.0](https://github.com/qianbaidu0721/daily-cloud-collection/releases/tag/v1.0.0) | 首个开源版本：小程序 + API + 管理后台 |
 
 ---
 
-如果这个项目对你有帮助，欢迎 Star ⭐
+如果这个项目对你有帮助，欢迎 [Star ⭐](https://github.com/qianbaidu0721/daily-cloud-collection/stargazers)

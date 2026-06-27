@@ -1,0 +1,70 @@
+name: Bug 反馈
+description: 报告项目中的错误或异常行为
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！请尽量提供可复现步骤与环境信息。
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: 问题模块
+      options:
+        - 微信小程序
+        - Laravel API
+        - 管理后台 (admin-web)
+        - 部署 / 运维
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 清晰描述发生了什么、期望行为是什么
+      placeholder: 例如：上传云朵时接口返回 500
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 打开上传页
+        2. 选择图片并提交
+        3. 看到错误提示
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: 版本 / 分支
+      placeholder: main @ commit hash 或 v1.0.0
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境信息
+      placeholder: |
+        - OS: Windows 11 / Ubuntu 22.04
+        - PHP: 8.2
+        - Laravel: 11.x
+        - 微信开发者工具版本
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志 / 截图
+      description: 粘贴相关报错（请脱敏密钥）
+    validations:
+      required: false

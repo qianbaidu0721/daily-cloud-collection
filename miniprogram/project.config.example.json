@@ -1,0 +1,15 @@
+{
+  "description": "云屿集 - 每日云彩收集",
+  "compileType": "miniprogram",
+  "libVersion": "3.3.4",
+  "appid": "your-wechat-appid",
+  "projectname": "cloud-collection",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true
+  },
+  "condition": {}
+}

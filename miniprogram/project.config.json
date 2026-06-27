@@ -33,7 +33,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.3.4",
-  "appid": "wx680ac9a95f3b4d04",
+  "appid": "your-wechat-appid",
   "projectname": "cloud-collection",
   "condition": {},
   "editorSetting": {
