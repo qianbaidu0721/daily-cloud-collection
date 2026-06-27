@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "分享卡片",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "cloud-card": "/components/cloud-card/cloud-card"
+  }
+}

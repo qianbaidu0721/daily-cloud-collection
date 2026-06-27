@@ -1,0 +1,101 @@
+<view class="page-list">
+  <view class="page-header" style="padding-top: {{statusBarHeight}}px">
+    <view class="nav-bar" style="height: {{navContentHeight}}px">
+      <text class="nav-title">我的云朵集</text>
+      <view
+        wx:if="{{items.length > 0}}"
+        class="nav-action {{batchShareLoading ? 'disabled' : ''}}"
+        bindtap="batchShareAll"
+      >一键共享</view>
+    </view>
+  </view>
+
+  <view class="list-body">
+    <!-- 首次加载骨架屏 -->
+    <view wx:if="{{showSkeleton}}" class="skeleton-grid">
+      <view wx:for="{{[1,2,3,4]}}" wx:key="*this" class="skeleton-grid__item">
+        <view class="skeleton-card">
+          <view class="skeleton-card__image" />
+          <view class="skeleton-card__line" />
+          <view class="skeleton-card__line skeleton-card__line--short" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:elif="{{items.length === 0 && !loading && !loadFailed}}" class="empty-state-box">
+      <text class="empty-state-box__icon empty-state-box__icon--lg">☁️</text>
+      <text class="empty-state-box__title">这里还没有云朵</text>
+      <text class="empty-state-box__sub">去拍第一朵云吧 ~</text>
+      <view class="empty-state-box__btn" bindtap="goCollect">去收集</view>
+    </view>
+
+    <!-- 加载失败（无数据） -->
+    <view wx:elif="{{items.length === 0 && loadFailed}}" class="empty-state-box">
+      <text class="empty-state-box__icon">☁️</text>
+      <text class="empty-state-box__title">加载失败了</text>
+      <text class="empty-state-box__sub">网络走丢了，检查一下~</text>
+      <view class="empty-state-box__btn" bindtap="retryLoad">点击重试</view>
+    </view>
+
+    <!-- 瀑布流列表 -->
+    <view wx:else class="waterfall">
+      <view
+        wx:for="{{items}}"
+        wx:key="id"
+        class="waterfall-item card-rise"
+        style="animation-delay: {{index * 0.05}}s"
+      >
+        <cloud-card
+          layout="small"
+          cloudId="{{item.id}}"
+          imageUrl="{{item.image_url}}"
+          date="{{item.collect_date}}"
+          mood="{{item.moodEmoji}}"
+          city="{{item.location_city}}"
+          note="{{item.note}}"
+          isPublic="{{item.is_public}}"
+          showPublicBadge="{{true}}"
+          bind:tap="onCardTap"
+        />
+      </view>
+    </view>
+
+    <!-- 底部加载状态 -->
+    <view wx:if="{{items.length > 0}}" class="load-more">
+      <block wx:if="{{loadingMore}}">
+        <text>☁️ 加载中</text>
+        <view class="load-more-dots">
+          <text /><text /><text />
+        </view>
+      </block>
+      <text wx:elif="{{loadFailed}}" class="load-more-retry" bindtap="retryLoad">加载失败，点击重试</text>
+      <text wx:elif="{{noMore}}">— 已加载全部 ☁️ —</text>
+    </view>
+  </view>
+</view>
+
+<!-- 详情弹层 -->
+<view wx:if="{{detailCloud}}" class="detail-mask" bindtap="closeDetail">
+  <view class="detail-panel" catchtap="noop">
+    <view class="detail-close" catchtap="closeDetail">关闭</view>
+    <image
+      class="detail-image"
+      src="{{detailCloud.image_url}}"
+      mode="widthFix"
+      bindtap="previewImage"
+      data-url="{{detailCloud.image_url}}"
+    />
+    <view class="detail-info">
+      <text class="detail-date">{{detailCloud.displayDate || detailCloud.collect_date}}</text>
+      <text wx:if="{{detailCloud.location_city}}">📍 {{detailCloud.location_city}}</text>
+      <text wx:if="{{detailCloud.mood}}">{{detailCloud.moodEmoji}} {{detailCloud.moodLabel}}</text>
+      <text wx:if="{{detailCloud.note}}">{{detailCloud.note}}</text>
+      <view class="detail-visibility" bindtap="toggleDetailVisibility">
+        <text>{{detailCloud.is_public ? '🌍 已共享到广场' : '🔒 仅自己可见'}}</text>
+        <text class="detail-visibility-action">{{visibilityLoading ? '处理中...' : '点击切换'}}</text>
+      </view>
+      <view class="detail-share-link" catchtap="goShareCard">✨ 制作分享卡片 →</view>
+    </view>
+  </view>
+</view>

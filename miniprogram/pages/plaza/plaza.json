@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#F0F4F8",
+  "usingComponents": {
+    "cloud-card": "/components/cloud-card/cloud-card"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "今日收集",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#F0F4F8",
+  "usingComponents": {
+    "cloud-card": "/components/cloud-card/cloud-card"
+  }
+}

@@ -1,0 +1,321 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f0f4f8;
+  overflow: hidden;
+}
+
+/* ========== 顶部导航 ========== */
+.nav-bar {
+  flex-shrink: 0;
+  background: #ffffff;
+  border-bottom: 1rpx solid #e8edf2;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx;
+}
+
+.nav-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #3d4a5a;
+}
+
+.nav-status {
+  flex-shrink: 0;
+}
+
+.status-tag {
+  font-size: 24rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
+}
+
+.status-tag.checked {
+  color: #5bb5d8;
+  background: rgba(126, 200, 227, 0.15);
+}
+
+.status-tag.unchecked {
+  color: #8a9aa8;
+  background: #f0f4f8;
+}
+
+/* ========== 统计横条 ========== */
+.stats-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin: 16rpx 24rpx 0;
+  padding: 20rpx 16rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(126, 200, 227, 0.12);
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.stat-number {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #7ec8e3;
+  line-height: 1.2;
+}
+
+.stat-number--text {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #3d4a5a;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #8a9aa8;
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 48rpx;
+  background: #e8edf2;
+}
+
+/* ========== 地图（60vh） ========== */
+.map-area {
+  flex-shrink: 0;
+  width: 100%;
+  height: 42vh;
+  margin-top: 16rpx;
+}
+
+/* ========== 打卡记录列表（约 30%） ========== */
+.record-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 16rpx 24rpx 0;
+  padding: 20rpx 20rpx 0;
+  background: #ffffff;
+  border-radius: 16rpx 16rpx 0 0;
+  box-shadow: 0 -4rpx 20rpx rgba(126, 200, 227, 0.08);
+}
+
+.list-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.list-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #3d4a5a;
+}
+
+.list-more {
+  font-size: 24rpx;
+  color: #7ec8e3;
+}
+
+.list-scroll {
+  flex: 1;
+  height: 0;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f4f8;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.record-emoji {
+  font-size: 40rpx;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.record-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.record-date {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #3d4a5a;
+  line-height: 1.4;
+}
+
+.record-location {
+  display: block;
+  font-size: 24rpx;
+  color: #8a9aa8;
+  margin-top: 4rpx;
+}
+
+.record-right {
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.record-cloud-type {
+  font-size: 22rpx;
+  color: #7ec8e3;
+  white-space: nowrap;
+}
+
+/* ========== 底部打卡按钮 ========== */
+.bottom-action {
+  flex-shrink: 0;
+  padding: 16rpx 32rpx calc(16rpx + env(safe-area-inset-bottom));
+  background: #ffffff;
+  border-top: 1rpx solid #e8edf2;
+}
+
+.btn-checkin {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 44rpx;
+  background: linear-gradient(90deg, #7ec8e3 0%, #b5dff0 100%);
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 28rpx rgba(126, 200, 227, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.btn-checkin::after {
+  border: none;
+}
+
+.btn-checkin--pressed {
+  transform: scale(0.96);
+}
+
+/* ========== 详情弹层 ========== */
+.marker-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(61, 74, 90, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  box-sizing: border-box;
+}
+
+.marker-popup {
+  width: 100%;
+  max-width: 560rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 40rpx rgba(126, 200, 227, 0.25);
+}
+
+.marker-popup__hero {
+  height: 200rpx;
+  background: linear-gradient(145deg, #dce8f2 0%, #f5f0eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24rpx;
+}
+
+.marker-popup__emoji {
+  font-size: 72rpx;
+  line-height: 1;
+}
+
+.marker-popup__cloud {
+  font-size: 96rpx;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.marker-popup__info {
+  padding: 24rpx 32rpx;
+}
+
+.marker-popup__date {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #3d4a5a;
+  margin-bottom: 8rpx;
+}
+
+.marker-popup__mood,
+.marker-popup__city,
+.marker-popup__type {
+  display: block;
+  font-size: 26rpx;
+  color: #8a9aa8;
+  margin-top: 6rpx;
+}
+
+.marker-popup__coord {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #b5c8d8;
+}
+
+.marker-popup__close {
+  text-align: center;
+  padding: 24rpx;
+  font-size: 28rpx;
+  color: #7ec8e3;
+  font-weight: 600;
+  border-top: 1rpx solid #e8edf2;
+}
+
+/* ========== 定位中 ========== */
+.locating-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(255, 255, 255, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.locating-text {
+  font-size: 28rpx;
+  color: #3d4a5a;
+}

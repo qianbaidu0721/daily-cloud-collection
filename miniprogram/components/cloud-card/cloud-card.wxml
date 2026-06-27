@@ -1,0 +1,39 @@
+<!-- 云朵卡片 -->
+<view class="cloud-card cloud-card--{{layout}}" bindtap="onTap">
+  <view class="cloud-card__image-wrap">
+    <!-- 加载占位 / 失败重试 -->
+    <view wx:if="{{!imageLoaded && !imageError}}" class="img-placeholder">
+      <text class="img-placeholder__icon">☁️</text>
+    </view>
+    <view wx:if="{{imageError}}" class="img-placeholder" catchtap="onRetryImage">
+      <text class="img-placeholder__icon">☁️</text>
+      <text class="img-placeholder__error">图片加载失败</text>
+      <text class="img-placeholder__retry">点我重试</text>
+    </view>
+    <image
+      wx:if="{{displayUrl && !imageError}}"
+      class="cloud-card__image {{imageLoaded ? '' : 'cloud-card__image--hidden'}}"
+      src="{{displayUrl}}"
+      mode="widthFix"
+      lazy-load
+      bindload="onImageLoad"
+      binderror="onImageError"
+    />
+    <!-- 底部渐变信息条 -->
+    <view wx:if="{{imageLoaded}}" class="cloud-card__overlay">
+      <text wx:if="{{showDate && displayDate}}" class="cloud-card__date">{{displayDate}}</text>
+      <text wx:if="{{authorLabel}}" class="cloud-card__author">{{authorLabel}}</text>
+      <text wx:elif="{{city}}" class="cloud-card__city">📍 {{city}}</text>
+    </view>
+    <!-- 左上角共享状态 -->
+    <view wx:if="{{showPublicBadge && imageLoaded}}" class="cloud-card__visibility">
+      <text>{{isPublic ? '🌍' : '🔒'}}</text>
+    </view>
+    <!-- 右上角心情 -->
+    <view wx:if="{{mood && imageLoaded}}" class="cloud-card__mood">
+      <text>{{mood}}</text>
+    </view>
+  </view>
+  <!-- large 布局：备注显示在图片下方 -->
+  <view wx:if="{{isLarge && note && imageLoaded}}" class="cloud-card__note">{{note}}</view>
+</view>

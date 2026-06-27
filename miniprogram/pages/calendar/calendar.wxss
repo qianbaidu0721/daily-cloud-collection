@@ -1,0 +1,495 @@
+.page-calendar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-page);
+  overflow: hidden;
+}
+
+/* ========== 顶部导航 ========== */
+.page-header {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.capsule-gap {
+  width: 100%;
+}
+
+.month-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  padding: 0 var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.month-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  flex: 1;
+  min-width: 0;
+  padding: 0 80rpx;
+  box-sizing: border-box;
+}
+
+.month-arrow {
+  font-size: 32rpx;
+  color: var(--primary);
+  padding: var(--spacing-sm);
+  line-height: 1;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.month-arrow--left {
+  position: absolute;
+  left: var(--spacing-sm);
+}
+
+.month-arrow--right {
+  position: absolute;
+  right: var(--spacing-sm);
+}
+
+.month-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.month-today {
+  font-size: var(--text-sm);
+  color: var(--primary);
+  padding: 4rpx 16rpx;
+  background: var(--primary-light);
+  border-radius: var(--radius-tag);
+  line-height: 1.4;
+}
+
+.fade-month {
+  transition: opacity 0.25s ease;
+}
+
+.fade-month.fade-in {
+  opacity: 1;
+}
+
+.fade-month.fade-out {
+  opacity: 0;
+}
+
+/* ========== 滚动区 ========== */
+.calendar-scroll {
+  flex: 1;
+  height: 0;
+}
+
+.calendar-body {
+  padding: var(--spacing-md) var(--spacing-sm) calc(var(--spacing-lg) + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  transition: opacity 0.25s ease;
+}
+
+.calendar-body--loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ========== 某月空状态 ========== */
+.month-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.month-empty__icon {
+  font-size: 64rpx;
+  line-height: 1;
+  margin-bottom: var(--spacing-sm);
+  opacity: 0.7;
+}
+
+.month-empty__text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.month-empty__btn {
+  padding: 12rpx 32rpx;
+  border-radius: var(--radius-tag);
+  background: rgba(126, 200, 227, 0.15);
+  color: var(--primary-dark);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.records-empty__btn {
+  margin-top: var(--spacing-md);
+}
+
+/* ========== 日历卡片 ========== */
+.calendar-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.weekday-row {
+  display: flex;
+  margin-bottom: var(--spacing-sm);
+  padding: 0 var(--spacing-xs);
+}
+
+.weekday {
+  flex: 1;
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.weekday.weekend {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.calendar-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.day-cell {
+  width: calc(100% / 7);
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.day-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.day-num {
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.day-cell.other-month .day-num {
+  color: var(--text-secondary);
+  opacity: 0.35;
+}
+
+.day-inner.today {
+  border: 3rpx solid var(--primary);
+  box-sizing: border-box;
+}
+
+.day-inner.today .day-num {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.day-inner.selected {
+  background: var(--primary-light);
+}
+
+.day-inner.selected .day-num {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.day-inner.today.selected {
+  background: var(--primary-light);
+  border-color: var(--primary-dark);
+}
+
+.cloud-dot {
+  position: absolute;
+  bottom: 6rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.day-inner.selected .cloud-dot {
+  background: var(--primary-dark);
+}
+
+/* ========== 月度统计 ========== */
+.stats-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.stats-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.stats-count {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stats-total {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.stats-bar {
+  height: 12rpx;
+  background: var(--border-light);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.stats-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 6rpx;
+  min-width: 0;
+  transition: width 0.35s ease;
+}
+
+/* ========== 区块标题 ========== */
+.section-title {
+  display: block;
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ========== 选中日预览 ========== */
+.preview-section {
+  margin-bottom: var(--spacing-md);
+}
+
+.preview-card {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.preview-thumb {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: var(--radius-tag);
+  flex-shrink: 0;
+  background: var(--border-light);
+}
+
+.preview-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.preview-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.preview-mood {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.preview-label {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.preview-public {
+  font-size: var(--text-sm);
+}
+
+.preview-city {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.preview-note {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.5;
+}
+
+.preview-link {
+  font-size: var(--text-sm);
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.preview-share-btn {
+  margin-top: var(--spacing-sm);
+  padding: 16rpx 32rpx;
+  border-radius: 40rpx;
+  background: linear-gradient(90deg, #7EC8E3 0%, #B5DFF0 100%);
+  color: #ffffff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  align-self: flex-start;
+  box-shadow: 0 6rpx 20rpx rgba(126, 200, 227, 0.3);
+}
+
+.preview-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.preview-empty-icon {
+  font-size: 64rpx;
+  line-height: 1;
+  margin-bottom: var(--spacing-sm);
+  opacity: 0.6;
+}
+
+.preview-empty-text {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.preview-btn {
+  width: 320rpx;
+}
+
+/* ========== 本月记录 ========== */
+.records-section {
+  margin-bottom: var(--spacing-md);
+}
+
+.records-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-lg);
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+}
+
+.records-btn {
+  width: 280rpx;
+  margin-top: var(--spacing-md);
+}
+
+.records-list {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1rpx solid var(--border-light);
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-item.active {
+  background: rgba(126, 200, 227, 0.12);
+}
+
+.record-thumb {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: var(--radius-tag);
+  flex-shrink: 0;
+  background: var(--border-light);
+}
+
+.record-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  text-align: left;
+}
+
+.record-date {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.record-meta {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.record-public {
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+.record-arrow {
+  font-size: 36rpx;
+  color: var(--text-secondary);
+  line-height: 1;
+  flex-shrink: 0;
+}

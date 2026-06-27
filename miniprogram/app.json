@@ -1,0 +1,61 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/upload/upload",
+    "pages/list/list",
+    "pages/calendar/calendar",
+    "pages/plaza/plaza",
+    "pages/share-card/share-card"
+  ],
+  "window": {
+    "navigationStyle": "default",
+    "navigationBarTitleText": "云屿集",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F0F4F8",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#8A9AA8",
+    "selectedColor": "#7EC8E3",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "今日",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/list/list",
+        "text": "云朵",
+        "iconPath": "assets/icons/list.png",
+        "selectedIconPath": "assets/icons/list-active.png"
+      },
+      {
+        "pagePath": "pages/calendar/calendar",
+        "text": "日历",
+        "iconPath": "assets/icons/calendar.png",
+        "selectedIconPath": "assets/icons/calendar-active.png"
+      },
+      {
+        "pagePath": "pages/plaza/plaza",
+        "text": "广场",
+        "iconPath": "assets/icons/plaza.png",
+        "selectedIconPath": "assets/icons/plaza-active.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于记录云朵收集位置"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

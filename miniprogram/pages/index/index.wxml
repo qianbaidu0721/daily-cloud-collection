@@ -1,0 +1,77 @@
+<view class="page-index">
+  <!-- 顶部日期 -->
+  <view class="header">
+    <text class="date-text">{{dateHeader}}</text>
+    <text class="date-cloud">☁️</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{isLoading}}" class="page-loading">
+    <text class="page-loading__icon cloud-loading">☁️</text>
+    <text class="page-loading__text">云朵加载中...</text>
+    <text wx:if="{{loadingSlow}}" class="page-loading__text page-loading__text--slow">等一等，云朵正在飘来~</text>
+  </view>
+
+  <!-- 主内容区 -->
+  <view wx:else class="main-content fade-in {{pageReady ? 'show' : ''}}">
+    <!-- 首次使用空状态 -->
+    <view wx:if="{{isFirstTime && !uploaded}}" class="empty-state-box">
+      <text class="empty-state-box__icon">☁️</text>
+      <text class="empty-state-box__title">还没有收集云朵</text>
+      <text class="empty-state-box__sub">去拍第一朵云吧 ~</text>
+      <view class="empty-state-box__btn" bindtap="startUpload">去收集</view>
+    </view>
+
+    <!-- 今日未收集（有历史记录） -->
+    <view wx:elif="{{!uploaded}}" class="status-empty">
+      <view
+        class="collect-btn-main"
+        hover-class="collect-btn-pressed"
+        hover-stay-time="100"
+        bindtap="startUpload"
+      >
+        <text class="collect-btn-icon">☁️</text>
+        <text class="collect-btn-text">收集今日云朵</text>
+      </view>
+      <text class="collect-hint">每天一朵，收藏天空的心情</text>
+
+      <view class="quick-actions">
+        <view class="quick-tag" hover-class="quick-tag-hover" data-type="mood" bindtap="onQuickTap">🌤️ 心情</view>
+        <view class="quick-tag" hover-class="quick-tag-hover" data-type="cloud_type" bindtap="onQuickTap">☁️ 云型</view>
+        <view class="quick-tag" hover-class="quick-tag-hover" data-type="location" bindtap="onQuickTap">📍 位置</view>
+        <view class="quick-tag" hover-class="quick-tag-hover" data-type="note" bindtap="onQuickTap">✏️ 备注</view>
+      </view>
+    </view>
+
+    <!-- 今日已收集 -->
+    <view wx:else class="status-collected">
+      <view class="hero-wrap">
+        <cloud-card
+          layout="large"
+          showDate="{{false}}"
+          imageUrl="{{todayCloud.image_url}}"
+          date="{{todayCloud.collect_date}}"
+          mood="{{moodEmoji}}"
+          city="{{todayCloud.location_city}}"
+          note="{{todayCloud.note}}"
+          isPublic="{{todayCloud.is_public}}"
+          showPublicBadge="{{true}}"
+          bind:tap="previewTodayCloud"
+        />
+      </view>
+
+      <view class="info-chips">
+        <text wx:if="{{todayCloud.mood}}" class="info-chip">{{moodEmoji}} {{moodDisplayLabel}}</text>
+        <text wx:if="{{todayCloud.cloud_type}}" class="info-chip">☁️ {{todayCloud.cloud_type}}</text>
+        <text wx:if="{{todayCloud.location_city}}" class="info-chip">📍 {{todayCloud.location_city}}</text>
+        <text class="info-chip">{{todayCloud.is_public ? '🌍 已共享' : '🔒 仅自己可见'}}</text>
+      </view>
+
+      <view class="action-row">
+        <view class="action-btn action-btn--secondary" bindtap="goToList">查看全部云朵</view>
+        <view class="action-btn action-btn--primary" bindtap="goShareCard">✨ 制作分享卡片</view>
+      </view>
+      <text class="preview-hint">点击卡片预览大图</text>
+    </view>
+  </view>
+</view>

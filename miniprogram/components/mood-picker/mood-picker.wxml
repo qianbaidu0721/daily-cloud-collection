@@ -1,0 +1,19 @@
+<!-- 心情选择器 -->
+<view class="mood-picker">
+  <view class="mood-title">{{title}}</view>
+  <view class="mood-list">
+    <view
+      wx:for="{{moods}}"
+      wx:key="value"
+      class="mood-item {{selected === item.value ? 'active' : ''}}"
+      data-value="{{item.value}}"
+      data-label="{{item.label}}"
+      bindtap="onSelect"
+    >
+      <view class="mood-emoji">
+        <text>{{item.emoji}}</text>
+      </view>
+      <text class="mood-label">{{item.label}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,110 @@
+<view class="page-container">
+
+  <!-- 顶部导航 -->
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px">
+    <view class="nav-inner" style="height: {{navContentHeight}}px">
+      <text class="nav-title">☁️ 云朵打卡地图</text>
+      <view class="nav-status">
+        <text class="status-tag {{todayChecked ? 'checked' : 'unchecked'}}">
+          {{todayChecked ? '✅ 已打卡' : '📌 未打卡'}}
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-bar">
+    <view class="stat-item">
+      <text class="stat-number">{{totalDays}}</text>
+      <text class="stat-label">打卡天数</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-number">{{totalCities}}</text>
+      <text class="stat-label">足迹城市</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-number stat-number--text">{{lastCheckin}}</text>
+      <text class="stat-label">最近打卡</text>
+    </view>
+  </view>
+
+  <!-- 地图（约 60%） -->
+  <map
+    id="cloudMap"
+    class="map-area"
+    latitude="{{currentLat}}"
+    longitude="{{currentLng}}"
+    scale="{{mapScale}}"
+    markers="{{markers}}"
+    show-location="{{true}}"
+    enable-compass="{{true}}"
+    enable-scale="{{true}}"
+    show-compass="{{true}}"
+    bindmarkertap="onMarkerTap"
+  />
+
+  <!-- 打卡记录列表（约 30%） -->
+  <view class="record-list">
+    <view class="list-header">
+      <text class="list-title">📋 打卡记录</text>
+      <text class="list-more" bindtap="viewAllRecords">查看全部 ›</text>
+    </view>
+    <scroll-view class="list-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <view
+        class="record-item"
+        wx:for="{{recentRecords}}"
+        wx:key="id"
+        bindtap="viewRecord"
+        data-id="{{item.id}}"
+      >
+        <view class="record-left">
+          <text class="record-emoji">{{item.moodEmoji}}</text>
+          <view class="record-info">
+            <text class="record-date">{{item.date}} {{item.time}} · {{item.moodLabel}}</text>
+            <text class="record-location">📍 {{item.city}}</text>
+          </view>
+        </view>
+        <view class="record-right">
+          <text class="record-cloud-type">☁️ {{item.cloudType}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 底部打卡按钮 -->
+  <view class="bottom-action">
+    <button
+      class="btn-checkin"
+      hover-class="btn-checkin--pressed"
+      hover-stay-time="100"
+      bindtap="simulateCheckin"
+    >
+      📸 打卡今日云朵
+    </button>
+  </view>
+
+  <!-- 打卡详情弹层 -->
+  <view wx:if="{{selectedRecord}}" class="marker-mask" bindtap="closeRecordPopup">
+    <view class="marker-popup" catchtap="noop">
+      <view class="marker-popup__hero">
+        <text class="marker-popup__emoji">{{selectedRecord.moodEmoji}}</text>
+        <text class="marker-popup__cloud">☁️</text>
+      </view>
+      <view class="marker-popup__info">
+        <text class="marker-popup__date">{{selectedRecord.date}} {{selectedRecord.time}}</text>
+        <text class="marker-popup__mood">{{selectedRecord.moodEmoji}} {{selectedRecord.moodLabel}}</text>
+        <text class="marker-popup__city">📍 {{selectedRecord.city}}</text>
+        <text class="marker-popup__type">☁️ {{selectedRecord.cloudType}}</text>
+        <text class="marker-popup__coord">精确坐标 {{selectedRecord.lat}}, {{selectedRecord.lng}}</text>
+      </view>
+      <view class="marker-popup__close" bindtap="closeRecordPopup">关闭</view>
+    </view>
+  </view>
+
+  <!-- 定位中 -->
+  <view wx:if="{{locating}}" class="locating-mask">
+    <text class="locating-text">正在获取精确位置...</text>
+  </view>
+</view>

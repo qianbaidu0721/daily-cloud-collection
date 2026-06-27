@@ -1,0 +1,43 @@
+# 宝塔 / Nginx 站点配置示例
+# 站点目录必须指向 Laravel 的 public 目录！
+
+server {
+    listen 80;
+    listen 443 ssl http2;
+    server_name cloud.chocei.com;
+
+    # ⚠️ 关键：root 必须是 public，不是项目根目录
+    root /www/wwwroot/cloud.chocei.com/public;
+    index index.php index.html;
+
+    # SSL 证书（宝塔自动生成路径，按实际修改）
+    # ssl_certificate    /www/server/panel/vhost/cert/cloud.chocei.com/fullchain.pem;
+    # ssl_certificate_key /www/server/panel/vhost/cert/cloud.chocei.com/privkey.pem;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/tmp/php-cgi-82.sock;  # 按宝塔 PHP 版本调整
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    # 禁止访问 storage / vendor 等（root 已在 public 时通常已隔离）
+    location ~* \.(env|log)$ {
+        deny all;
+    }
+}

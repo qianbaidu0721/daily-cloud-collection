@@ -1,0 +1,98 @@
+<view class="page-share-card">
+  <!-- 顶部：关闭按钮独立右上角 -->
+  <view class="page-top" style="padding-top: {{statusBarHeight}}px">
+    <view class="top-bar" style="height: {{navContentHeight}}px">
+      <text class="page-title">分享卡片</text>
+      <view class="btn-close" hover-class="btn-close--pressed" bindtap="onClose">关闭</view>
+    </view>
+  </view>
+
+  <!-- 主内容：云朵预览 -->
+  <scroll-view class="content-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view wx:if="{{loading}}" class="page-loading">
+      <text class="page-loading__icon cloud-loading">☁️</text>
+      <text class="page-loading__text">加载中...</text>
+    </view>
+
+    <view wx:elif="{{cloud}}" class="preview-body">
+      <cloud-card
+        layout="large"
+        showDate="{{true}}"
+        imageUrl="{{cloud.image_url}}"
+        date="{{cloud.collect_date}}"
+        mood="{{moodEmoji}}"
+        city="{{cloud.location_city}}"
+        note="{{cloud.note}}"
+        isPublic="{{cloud.is_public}}"
+        showPublicBadge="{{false}}"
+      />
+      <view class="preview-meta">
+        <text wx:if="{{cloud.cloud_type}}" class="meta-chip">☁️ {{cloud.cloud_type}}</text>
+        <text class="meta-chip">{{cloud.is_public ? '🌍 已共享' : '🔒 仅自己可见'}}</text>
+      </view>
+      <text class="preview-tip">生成后可预览大图或保存到相册</text>
+    </view>
+
+    <view wx:else class="empty-state-box">
+      <text class="empty-state-box__icon">☁️</text>
+      <text class="empty-state-box__title">云朵不存在</text>
+      <view class="empty-state-box__btn" bindtap="onClose">返回</view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部区域 -->
+  <view class="bottom-area">
+    <!-- 操作区：主按钮 -->
+    <view class="action-area">
+      <button
+        class="btn-generate"
+        hover-class="btn-generate--pressed"
+        hover-stay-time="100"
+        loading="{{generating}}"
+        disabled="{{!cloud || generating}}"
+        bindtap="generateCard"
+      >
+        ✨ 生成分享卡片
+      </button>
+    </view>
+
+    <!-- 分隔线 -->
+    <view class="divider"></view>
+
+    <!-- 导航区：Tab -->
+    <view class="tab-area">
+      <view
+        class="tab-item {{currentTab === 'index' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="index"
+      >
+        <text class="tab-icon">☁️</text>
+        <text class="tab-text">今日</text>
+      </view>
+      <view
+        class="tab-item {{currentTab === 'list' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="list"
+      >
+        <text class="tab-icon">📷</text>
+        <text class="tab-text">云朵</text>
+      </view>
+      <view
+        class="tab-item {{currentTab === 'calendar' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="calendar"
+      >
+        <text class="tab-icon">📅</text>
+        <text class="tab-text">日历</text>
+      </view>
+      <view
+        class="tab-item {{currentTab === 'plaza' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="plaza"
+      >
+        <text class="tab-icon">🌐</text>
+        <text class="tab-text">广场</text>
+      </view>
+    </view>
+  </view>
+</view>
